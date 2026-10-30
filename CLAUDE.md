@@ -26,9 +26,10 @@ Next.js(App Router) + TypeScript / Tailwind + shadcn/ui / Supabase(DB·Auth·Sto
 
 ## 작업 방식
 - **폴더/패키지 전체를 훑거나 3개 이상 파일을 고칠 때는 plan mode로 소스 분석 먼저.** → `codebase-analysis`
-- 브랜치 `feature/<설명>`, `main` 직접 커밋·푸시 금지. 티켓 1개 = 브랜치 1개 = PR 1개.
-- 커밋 `feat|fix|docs|refactor|test: ...`. PR 전 `pr-checklist`, 작성자와 검토자(`reviewer`, 읽기 전용)는 분리.
 - 문서에 없는 결정은 임의로 정하지 말고 사용자에게 묻는다.
+- Git 규칙(브랜치·커밋·PR·머지):
+
+@docs/git-workflow.md
 
 ## 파일 역할 분리 (토큰 절약)
 | 위치 | 역할 | 로드 시점 |
@@ -40,6 +41,6 @@ Next.js(App Router) + TypeScript / Tailwind + shadcn/ui / Supabase(DB·Auth·Sto
 
 - 새 규칙을 추가할 때: 한두 줄로 요약되면 CLAUDE.md에, 예시·형식·절차가 필요하면 **스킬로 만들고** CLAUDE.md에는 스킬 이름만 적는다.
 - 스킬의 `description`은 항상 로드되므로 **한 줄로 짧게** 쓴다.
-- 스킬: `closet-tagging` `outfit-recommend` `shopping-recommend` `wishlist-link` `code-convention` `codebase-analysis` `db-migration` `notion-sync` `pr-checklist`
+- 스킬: `closet-tagging` `outfit-recommend` `shopping-recommend` `wishlist-link` `code-convention` `codebase-analysis` `db-migration` `git-convention` `notion-sync` `pr-checklist`
 - 에이전트: `planner` `backend` `frontend` `reviewer` (db/config는 에이전트 대신 스킬로 관리)
-- 문서: `docs/roadmap.md`(개발 순서·폴더 구조) `docs/decisions.md`(결정 기록)
+- 문서: `docs/roadmap.md`(개발 순서·폴더 구조) `docs/decisions.md`(결정 기록) `docs/git-workflow.md`(Git 규칙, 항상 로드)
