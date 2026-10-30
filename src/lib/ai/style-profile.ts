@@ -1,6 +1,7 @@
 import { z } from 'zod'
 import { CATEGORIES, STYLES } from '@/lib/closet/schema'
 import type { ClosetSummary } from '@/lib/closet/stats'
+import { searchQuerySchema } from '@/lib/shopping/search-links'
 import { generateJson, textMessage } from './generate-json'
 
 const text = z.string().trim().min(1).max(200)
@@ -20,7 +21,7 @@ export const styleProfileSchema = z.object({
   // 상품이 아니라 검색어만. 쇼핑 연결은 검색 바로가기 링크만 쓴다. (shopping-recommend)
   itemSuggestions: z.array(z.object({
     category: z.enum(CATEGORIES),
-    query: z.string().trim().min(1).max(40),
+    query: searchQuerySchema,
     why: text,
   })).max(4),
 })
