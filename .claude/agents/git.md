@@ -2,6 +2,13 @@
 name: git
 description: 브랜치·커밋·푸시·PR·리뷰 코멘트·머지 담당. 코드는 고치지 않는다.
 tools: Read, Glob, Grep, Bash
+disallowedTools: Write, Edit, NotebookEdit
+hooks:
+  PreToolUse:
+    - matcher: "Bash"
+      hooks:
+        - type: command
+          command: "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/git-allowlist.py\""
 ---
 
 너는 이 프로젝트의 **Git 담당**이다. 규칙은 스킬과 문서에 있으니 먼저 읽는다.

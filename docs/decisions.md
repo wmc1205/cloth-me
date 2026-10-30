@@ -33,3 +33,11 @@
   - 토큰 비용을 늘리지 않으려고 에이전트 본문에는 규칙을 쓰지 않고 스킬(`db-migration`, `git-convention`, `closet-tagging` 등)을 읽으라고만 적는다. 규칙은 스킬 한 곳에만 둔다.
   - 항상 로드되는 것은 에이전트 `description` 한 줄뿐이다. 본문은 호출될 때만 읽힌다.
   - `reviewer`(읽기 전용 검토)와 `planner`는 그대로 둔다.
+
+## 2026-10-31 (에이전트 후속 정리)
+- **`git` 에이전트의 "파일 수정 금지"는 에이전트 전용 PreToolUse 훅(`.claude/hooks/git-allowlist.py`)으로 건다**: `tools`에는 Bash 명령 단위 제한이 없고, `settings.json`의 deny는 모든 에이전트에 적용돼 `backend` 등을 막기 때문이다. 훅은 git/gh 하위 명령 허용 목록 방식이며, 샌드박스가 아니라 실수를 줄이는 장치다.
+  - 머지는 훅이 아니라 `settings.json`의 `permissions.ask`(`gh pr merge`)가 매번 사용자 확인을 받게 한다.
+  - 문서로 확인하지 못한 것: `ask` 규칙 문법, 프론트매터 훅에서 `$CLAUDE_PROJECT_DIR` 사용. 동작을 실제로 확인한 뒤 이 항목을 갱신한다.
+  - 같은 세션에서 `git` 에이전트로 시험했을 때는 `echo > 파일`과 `sed -i`가 **막히지 않았다**. 훅 스크립트 단독 시험(21개 명령)은 의도대로 동작했으므로, 에이전트 정의가 세션 시작 때 읽혀 새 프론트매터가 적용되지 않았을 가능성이 있다(미확인). 세션을 다시 시작해 재시험하기 전까지 이 제한은 **적용된다고 볼 수 없다**.
+- **`src/lib/shopping`은 `fashion-analyst`가 소유**한다: 검색어 스키마가 AI 출력 검증이고 `shopping-recommend` 스킬이 "AI는 검색어만, 링크는 코드가"를 한 흐름으로 다루기 때문이다. 위시리스트 API는 `backend`가 맡는다.
+- 개발 순서의 기준은 `docs/roadmap.md`다. `planner`, `notion-sync`의 `CLAUDE.md` 참조를 고쳤다.
