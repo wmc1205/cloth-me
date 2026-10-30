@@ -1,5 +1,6 @@
 import { z } from 'zod'
 import { CATEGORIES } from '@/lib/closet/schema'
+import { searchQuerySchema } from '@/lib/shopping/search-links'
 import { generateJson, textMessage } from './generate-json'
 
 export const outfitSchema = z.object({
@@ -13,7 +14,7 @@ export const outfitSchema = z.object({
   reason: z.string().trim().min(1).max(300),
   shoppingHints: z.array(z.object({
     category: z.enum(CATEGORIES),
-    query: z.string().trim().min(1).max(40),
+    query: searchQuerySchema,
     why: z.string().trim().min(1).max(200),
   })).max(2),
 })

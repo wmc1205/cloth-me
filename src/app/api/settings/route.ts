@@ -8,7 +8,11 @@ export async function GET() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return NextResponse.json({ error: '로그인이 필요합니다.' }, { status: 401 })
 
-  return NextResponse.json({ settings: await getSettings(supabase) })
+  try {
+    return NextResponse.json({ settings: await getSettings(supabase) })
+  } catch {
+    return NextResponse.json({ error: '설정을 불러오지 못했습니다.' }, { status: 500 })
+  }
 }
 
 export async function PUT(request: Request) {
