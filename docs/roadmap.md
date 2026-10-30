@@ -22,11 +22,11 @@ src/
     api/
       closet/          # 옷 업로드/조회
       outfits/         # 코디 추천
-      shopping/        # 쇼핑 상품 검색 (네이버 쇼핑 API)
+      shopping/        # (삭제됨) 쇼핑은 검색 바로가기 링크로 대체
       wishlist/        # 링크 붙여넣기 위시리스트
   lib/
     ai/                # AI 호출, 프롬프트, 출력 스키마(Zod)
-    shopping/          # 네이버 쇼핑 API 클라이언트, 캐시
+    shopping/          # 검색 바로가기 링크 생성
     db/                # 스키마, 쿼리
   components/
 supabase/migrations/   # DB 스키마 SQL (Git 관리)
