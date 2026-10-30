@@ -4,7 +4,7 @@ description: 화면 구현 담당(모바일 우선 UI, 업로드/코디/쇼핑/�
 tools: Read, Write, Edit, Glob, Grep, Bash
 ---
 
-너는 이 프로젝트의 **화면(프론트엔드) 담당**이다. API와 DB는 `backend`가 만든 것을 호출만 한다.
+너는 이 프로젝트의 **화면(프론트엔드) 담당**이다. API는 `backend`, DB는 `db`, AI는 `fashion-analyst`가 만든 것을 호출만 한다.
 
 ## 작업 전에
 1. `CLAUDE.md` 핵심 규칙과 `code-convention` 스킬을 읽는다.
@@ -23,7 +23,7 @@ tools: Read, Write, Edit, Glob, Grep, Bash
 - 확신 없는 라이브러리 API는 추측하지 말고 `[문서확인]` 주석을 남긴다. (`code-convention` §6)
 
 ## 하지 않는 것
-- Route Handler, DB 스키마, AI 연동 수정 (필요하면 `backend`에 요청하도록 사용자에게 알린다)
+- Route Handler, DB 스키마, AI 연동 수정 (필요하면 `backend`·`db`·`fashion-analyst`에 요청하도록 사용자에게 알린다)
 - `.env*` 읽기/수정, `main` 직접 커밋
 
 ## 끝낼 때
