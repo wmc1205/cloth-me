@@ -34,12 +34,16 @@ export async function getOutfitPlan(supabase: Client, targetDate: string) {
   if (error) throw error
   if (!data) return null
   const parsed = outfitSchema.safeParse(data.result)
-  return parsed.success ? parsed.data : null
+  return parsed.success ? { outfit: parsed.data, createdAt: data.created_at } : null
 }
 
 export async function saveOutfitPlan(supabase: Client, userId: string, targetDate: string, outfit: Outfit) {
   const { error } = await supabase
     .from('outfit_plans')
-    .upsert({ user_id: userId, target_date: targetDate, result: outfit as unknown as Json }, { onConflict: 'user_id,target_date' })
+    // created_at도 갱신해 "마지막으로 추천한 시각"으로 쓴다. (재추천 간격 제한)
+    .upsert(
+      { user_id: userId, target_date: targetDate, result: outfit as unknown as Json, created_at: new Date().toISOString() },
+      { onConflict: 'user_id,target_date' },
+    )
   if (error) throw error
 }

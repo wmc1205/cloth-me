@@ -17,7 +17,8 @@ async function PlanContent() {
   const settings = await getSettings(supabase)
   const now = new Date()
   const target = nextTargetDay(now, settings)
-  const outfit = target ? await getOutfitPlan(supabase, target.date) : null
+  const plan = target ? await getOutfitPlan(supabase, target.date) : null
+  const outfit = plan?.outfit ?? null
   const items = outfit ? await listClosetItems(supabase) : []
   const byId = new Map(items.map((item) => [item.id, item]))
 
@@ -59,7 +60,7 @@ async function PlanContent() {
         )}
         {target && (
           // key: 요일 설정을 바꿔 추천 대상 날짜가 달라지면 새로 마운트되어 자동 생성이 다시 동작한다.
-          <NextOutfit key={target.date} autoGenerate={isDue(now, settings) && !outfit} hasOutfit={outfit !== null} />
+          <NextOutfit key={target.date} targetDate={target.date} autoGenerate={isDue(now, settings) && !outfit} hasOutfit={outfit !== null} />
         )}
       </section>
 
