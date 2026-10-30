@@ -1,5 +1,5 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
-import type { Database } from './database.types'
+import type { Database, TablesUpdate } from './database.types'
 
 type Client = SupabaseClient<Database>
 
@@ -21,6 +21,34 @@ export async function insertClosetItem(
     .single()
   if (error) throw error
   return data
+}
+
+export async function getClosetItem(supabase: Client, id: string) {
+  const { data, error } = await supabase.from('closet_items').select().eq('id', id).maybeSingle()
+  if (error) throw error
+  return data
+}
+
+export async function updateClosetItem(
+  supabase: Client,
+  id: string,
+  fields: TablesUpdate<'closet_items'>,
+) {
+  const { data, error } = await supabase
+    .from('closet_items')
+    .update(fields)
+    .eq('id', id)
+    .select()
+    .single()
+  if (error) throw error
+  return data
+}
+
+// 행을 지우고 스토리지 사진도 함께 지운다. 사진 삭제 실패는 행 삭제를 막지 않는다(고아 파일만 남는다).
+export async function deleteClosetItem(supabase: Client, item: { id: string; image_path: string }) {
+  const { error } = await supabase.from('closet_items').delete().eq('id', item.id)
+  if (error) throw error
+  await supabase.storage.from('closet').remove([item.image_path])
 }
 
 // RLS가 본인 행만 돌려준다. 서명 URL은 짧게 만료되므로 화면 렌더 때마다 새로 만든다.

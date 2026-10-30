@@ -1,6 +1,6 @@
 ---
 name: backend
-description: 서버 코드 구현 담당(Route Handler, DB, 업로드, AI/네이버 API 연동).
+description: 서버 코드 구현 담당(Route Handler, DB, 업로드, AI 연동).
 tools: Read, Write, Edit, Glob, Grep, Bash
 ---
 

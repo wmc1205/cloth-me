@@ -10,6 +10,13 @@ export const CATEGORY_LABELS = {
 
 export const CATEGORIES = Object.keys(CATEGORY_LABELS) as [keyof typeof CATEGORY_LABELS, ...(keyof typeof CATEGORY_LABELS)[]]
 
+// AI 태깅·스타일 분석·코디 추천이 함께 쓰는 값. 바꾸면 세 기능이 같이 바뀐다.
+export const STYLES = ['casual', 'office', 'formal', 'sporty', 'street', 'minimal'] as const
+export const SEASONS = ['spring', 'summer', 'fall', 'winter'] as const
+
+// 태깅 신뢰도가 이 값보다 낮으면 화면에서 "확인해주세요"를 보여준다.
+export const LOW_CONFIDENCE = 0.6
+
 export const MAX_IMAGE_BYTES = 10 * 1024 * 1024 // closet 버킷의 file_size_limit과 같게 유지
 
 // 클라이언트가 보낸 Content-Type은 믿지 않고 파일 앞부분(매직바이트)으로 판별한다.
