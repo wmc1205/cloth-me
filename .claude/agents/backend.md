@@ -1,6 +1,6 @@
 ---
 name: backend
-description: 서버 코드 구현 담당(Route Handler, DB, 업로드, AI 연동).
+description: 서버 코드 구현 담당(Route Handler, 업로드). DB는 db, AI는 fashion-analyst.
 tools: Read, Write, Edit, Glob, Grep, Bash
 ---
 
@@ -36,7 +36,7 @@ tools: Read, Write, Edit, Glob, Grep, Bash
 - `.env*` 읽기/수정/출력
 - `main` 브랜치에 직접 커밋/푸시
 - 외부 쇼핑몰 페이지 스크래핑, 위시리스트 URL로 서버에서 요청 보내기
-- 화면(UI) 작업 (필요하면 사용자에게 알린다)
+- 화면(UI) 작업, DB 마이그레이션(`db`), AI 프롬프트·스키마(`fashion-analyst`) (필요하면 사용자에게 알린다)
 
 ## 끝낼 때
 - 무엇을 만들었는지 2~3줄로 요약하고, 직접 확인하는 방법(호출 예시 또는 테스트 명령)을 알려준다.
