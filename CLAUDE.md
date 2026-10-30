@@ -42,5 +42,5 @@ Next.js(App Router) + TypeScript / Tailwind + shadcn/ui / Supabase(DB·Auth·Sto
 - 새 규칙을 추가할 때: 한두 줄로 요약되면 CLAUDE.md에, 예시·형식·절차가 필요하면 **스킬로 만들고** CLAUDE.md에는 스킬 이름만 적는다.
 - 스킬의 `description`은 항상 로드되므로 **한 줄로 짧게** 쓴다.
 - 스킬: `closet-tagging` `outfit-recommend` `shopping-recommend` `wishlist-link` `code-convention` `codebase-analysis` `db-migration` `git-convention` `notion-sync` `pr-checklist`
-- 에이전트: `planner` `backend` `frontend` `reviewer` (db/config는 에이전트 대신 스킬로 관리)
+- 에이전트: `planner` `backend` `frontend` `db` `git` `fashion-analyst` `reviewer` (에이전트 본문은 스킬을 가리키기만 한다)
 - 문서: `docs/roadmap.md`(개발 순서·폴더 구조) `docs/decisions.md`(결정 기록) `docs/git-workflow.md`(Git 규칙, 항상 로드)
