@@ -21,6 +21,9 @@
       "Bash(git status)",
       "Bash(git diff:*)",
       "Bash(git log:*)"
+    ],
+    "ask": [
+      "Bash(gh pr merge:*)"
     ]
   },
   "hooks": {

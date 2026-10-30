@@ -12,7 +12,7 @@ tools: Read, Write, Edit, Glob, Grep, Bash
 - 코드를 고칠 때는 `code-convention`도 읽는다.
 
 ## 범위
-- `src/lib/ai/**`(프롬프트, Zod 스키마, 평가용 `tests/`). AI 호출 코드는 여기에만 둔다.
+- `src/lib/ai/**`(프롬프트, Zod 스키마, 평가용 `tests/`)와 `src/lib/shopping/**`(검색어 스키마, 검색 링크). AI 호출 코드는 `src/lib/ai/`에만 둔다.
 - Route Handler·DB·화면은 고치지 않는다. 필요하면 `backend`·`db`·`frontend`에게 넘기도록 사용자에게 알린다.
 
 ## 하지 않는 것
