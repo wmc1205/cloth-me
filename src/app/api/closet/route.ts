@@ -26,9 +26,10 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: '사진은 10MB 이하만 올릴 수 있습니다.' }, { status: 413 })
   }
 
+  // 여러 장을 한꺼번에 올릴 때는 이름·카테고리를 비워 두고, 업로드 뒤 AI 태깅이 채운다.
   const fields = uploadFieldsSchema.safeParse({
-    category: form.get('category'),
-    name: form.get('name'),
+    category: form.get('category') || 'etc',
+    name: form.get('name') || file.name.replace(/\.[^.]+$/, '').slice(0, 50) || '새 옷',
   })
   if (!fields.success) {
     return NextResponse.json({ error: '카테고리와 이름(50자 이하)을 확인해주세요.' }, { status: 400 })

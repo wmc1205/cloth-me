@@ -14,6 +14,7 @@ description: 옷 사진 AI 태깅 JSON 형식과 규칙. 자동 태깅 기능 �
 ## 출력 JSON 형식 (Zod 스키마로 검증)
 ```json
 {
+  "isClothing": true,
   "category": "top",
   "name": "화이트 오버핏 셔츠",
   "colors": ["white"],
@@ -21,19 +22,22 @@ description: 옷 사진 AI 태깅 JSON 형식과 규칙. 자동 태깅 기능 �
   "seasons": ["spring", "fall"],
   "styles": ["casual", "office"],
   "pattern": "solid",
+  "brand": "adidas",
   "confidence": 0.86
 }
 ```
 
+- `isClothing`: 옷·신발·가방 등이 하나도 없는 사진(풍경, 음식 등)이면 `false`. 서버가 그 사진을 옷장에서 자동으로 삭제한다.
 - `category`: 위 5개 중 하나. 애매하면 `etc`
 - `colors`: 영어 소문자 기본 색상명 배열(최대 3개). 가장 큰 면적 색이 첫 번째
 - `seasons`: `spring | summer | fall | winter` 배열
 - `styles`: `casual | office | formal | sporty | street | minimal` 중에서 선택
+- `brand`: 사진에서 로고·라벨의 **글자가 읽힐 때만** 그대로 쓴다. 디자인만 보고 추측하지 않으며, 심볼(스우시 등)만 있으면 비운다.
 - `confidence`: 0~1. **0.6 미만이면 화면에서 "확인해주세요" 표시**
 
 ## 규칙
-1. 사진에 옷이 없거나 여러 벌이면 `category: "etc"`, `confidence: 0.3` 이하로 반환한다. (안내 문구는 서버가 `confidence` 값을 보고 처리한다)
-2. 브랜드나 가격은 추측하지 않는다. 사진에서 보이지 않으면 필드를 만들지 않는다.
+1. 사진에 옷이 전혀 없으면 `isClothing: false`로 반환하고 서버가 자동 제외한다. 옷이 있는지 애매하거나 여러 벌이면 제외하지 않고 `isClothing: true`, `category: "etc"`, `confidence: 0.3` 이하로 반환한다.
+2. 가격은 추측하지 않는다. 브랜드는 사진에서 읽힐 때만 쓰고, 보이지 않으면 필드를 만들지 않는다.
 3. 응답은 **JSON만** 반환한다(설명 문장 금지).
 4. Zod 검증에 실패하면 1회 재시도하고, 그래도 실패하면 사용자가 직접 입력하도록 폴백한다.
 
