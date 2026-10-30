@@ -1,6 +1,6 @@
 # 옷스스메 (옷 + おすすめ)
 
-옷 사진을 올리면 AI가 월~일 7일치 코디를 추천하고, 어울리는 쇼핑몰 상품도 보여준다. (공부 목적: 하네스 엔지니어링)
+옷 사진을 올리면 AI가 월~일 7일치 코디를 추천하고, 어울리는 아이템의 쇼핑몰 검색 링크도 보여준다. (공부 목적: 하네스 엔지니어링)
 
 ## 스택 (확정)
 Next.js(App Router) + TypeScript / Tailwind + shadcn/ui / Supabase(DB·Auth·Storage; 쿼리는 `supabase-js`+생성 타입, ORM 없음) / Claude API + Vercel AI SDK / Zod·Vitest·Playwright / Vercel 배포 / Notion MCP
@@ -9,7 +9,7 @@ Next.js(App Router) + TypeScript / Tailwind + shadcn/ui / Supabase(DB·Auth·Sto
 
 ## 핵심 규칙 (상세는 해당 스킬)
 1. AI 출력은 항상 JSON으로 받아 **Zod로 검증**한다. AI 호출 코드는 `src/lib/ai/`에만 둔다.
-2. 쇼핑 상품은 **네이버 쇼핑 API 결과만** 쓴다. AI는 검색어만 만든다. → `shopping-recommend`
+2. 쇼핑 연결은 **검색 바로가기 링크만** 쓴다. AI는 검색어만 만들고 상품 정보는 만들지 않는다. → `shopping-recommend`
 3. 위시리스트는 **링크만 저장**한다. 스크래핑·서버에서 해당 URL 요청 금지. → `wishlist-link`
 4. 비밀 키는 서버에서만 쓴다. `.env*`는 읽지도 커밋하지도 않는다. 키 이름은 `.env.example`에만.
 5. 옷 사진은 본인만 볼 수 있게(RLS). DB는 사용자 세션의 `supabase-js`로 접근하고(service role 키는 서버 전용·최소 사용), 업로드는 서버에서 형식·크기를 검사한다. → `db-migration`

@@ -16,27 +16,123 @@ export type Database = {
     Tables: {
       closet_items: {
         Row: {
+          brand: string | null
           category: string
+          colors: string[]
+          confidence: number | null
           created_at: string
           id: string
           image_path: string
+          material: string | null
           name: string
+          pattern: string | null
+          seasons: string[]
+          styles: string[]
+          tagged_at: string | null
           user_id: string
         }
         Insert: {
+          brand?: string | null
           category: string
+          colors?: string[]
+          confidence?: number | null
           created_at?: string
           id?: string
           image_path: string
+          material?: string | null
           name: string
+          pattern?: string | null
+          seasons?: string[]
+          styles?: string[]
+          tagged_at?: string | null
           user_id: string
         }
         Update: {
+          brand?: string | null
           category?: string
+          colors?: string[]
+          confidence?: number | null
           created_at?: string
           id?: string
           image_path?: string
+          material?: string | null
           name?: string
+          pattern?: string | null
+          seasons?: string[]
+          styles?: string[]
+          tagged_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      outfit_plans: {
+        Row: {
+          created_at: string
+          id: string
+          result: Json
+          target_date: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          result: Json
+          target_date: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          result?: Json
+          target_date?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      style_profiles: {
+        Row: {
+          created_at: string
+          profile: Json
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          profile: Json
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          profile?: Json
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_settings: {
+        Row: {
+          created_at: string
+          recommend_days: number[]
+          recommend_time: string
+          timezone: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          recommend_days?: number[]
+          recommend_time?: string
+          timezone?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          recommend_days?: number[]
+          recommend_time?: string
+          timezone?: string
+          updated_at?: string
           user_id?: string
         }
         Relationships: []
