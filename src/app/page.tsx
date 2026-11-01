@@ -4,6 +4,7 @@ import { createSupabaseServerClient } from '@/lib/db/supabase-server'
 import { listClosetItems } from '@/lib/db/closet'
 import { ClosetUploadForm } from '@/components/closet-upload-form'
 import { CategorySelect } from '@/components/category-select'
+import { DeleteButton } from '@/components/delete-button'
 import { LogoutButton } from '@/components/logout-button'
 import { NavLinks } from '@/components/nav-links'
 import { CATEGORIES, CATEGORY_LABELS, LOW_CONFIDENCE } from '@/lib/closet/schema'
@@ -56,7 +57,10 @@ async function ClosetList() {
                         {untagged ? '분류 전 · 직접 확인해주세요' : '확인해주세요'}
                       </span>
                     )}
-                    <CategorySelect id={item.id} category={item.category} />
+                    <div className="flex items-center gap-2">
+                      <CategorySelect id={item.id} category={item.category} />
+                      <DeleteButton id={item.id} name={item.name} />
+                    </div>
                   </li>
                 )
               })}
