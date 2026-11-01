@@ -3,6 +3,7 @@ import { z } from 'zod'
 import { createSupabaseServerClient } from '@/lib/db/supabase-server'
 import { deleteClosetItem, getClosetItem, updateClosetItem } from '@/lib/db/closet'
 import { detectImageType, MAX_IMAGE_BYTES } from '@/lib/closet/schema'
+import { extractOutfit } from '@/lib/closet/extract-outfit'
 import { tagItem } from '@/lib/ai/tag-item'
 
 export async function POST(_request: Request, { params }: { params: Promise<{ id: string }> }) {
@@ -36,6 +37,15 @@ export async function POST(_request: Request, { params }: { params: Promise<{ id
     if (!tag.isClothing) {
       await deleteClosetItem(supabase, item)
       return NextResponse.json({ excluded: true })
+    }
+
+    // 사람이 입은 사진은 옷을 한 벌씩 나눠 넣고 원본은 지운다. 하나도 못 나누면 아래에서 원본을 그대로 분류한다.
+    if (tag.wornByPerson) {
+      const extracted = await extractOutfit(supabase, user.id, bytes)
+      if (extracted > 0) {
+        await deleteClosetItem(supabase, item)
+        return NextResponse.json({ extracted })
+      }
     }
 
     const updated = await updateClosetItem(supabase, id, {
