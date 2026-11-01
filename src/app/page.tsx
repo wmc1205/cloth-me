@@ -5,6 +5,7 @@ import { listClosetItems } from '@/lib/db/closet'
 import { ClosetUploadForm } from '@/components/closet-upload-form'
 import { CategorySelect } from '@/components/category-select'
 import { LogoutButton } from '@/components/logout-button'
+import { ThemeToggle } from '@/components/theme-toggle'
 import { NavLinks } from '@/components/nav-links'
 import { CATEGORIES, CATEGORY_LABELS, LOW_CONFIDENCE } from '@/lib/closet/schema'
 
@@ -73,7 +74,10 @@ export default function Home() {
     <main className="mx-auto flex w-full max-w-md flex-1 flex-col gap-6 px-4 py-6">
       <header className="flex items-center justify-between">
         <h1 className="text-xl font-semibold">내 옷장</h1>
-        <LogoutButton />
+        <div className="flex items-center gap-1">
+          <ThemeToggle />
+          <LogoutButton />
+        </div>
       </header>
       <NavLinks />
 
