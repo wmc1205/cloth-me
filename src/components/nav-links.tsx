@@ -1,9 +1,9 @@
 import Link from 'next/link'
 
 const links = [
-  { href: '/', label: '내 옷장' },
-  { href: '/style', label: '내 스타일' },
-  { href: '/plan', label: '내일 코디' },
+  { href: '/', label: 'My Closet' },
+  { href: '/style', label: '스타일 분석' },
+  { href: '/plan', label: '코디 추천' },
 ]
 
 export function NavLinks() {

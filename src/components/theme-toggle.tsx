@@ -13,7 +13,14 @@ export function ThemeToggle() {
   }
 
   return (
-    <Button variant="ghost" size="sm" onClick={onClick} aria-label="화면 모드 전환">
+    // 모든 화면(로그인 포함)에서 쓰도록 우하단에 고정한다. 헤더에 두면 각 화면의 로그아웃 버튼과 겹친다.
+    <Button
+      variant="outline"
+      size="icon"
+      onClick={onClick}
+      aria-label="화면 모드 전환"
+      className="fixed bottom-4 right-4 z-50 rounded-full bg-background shadow-md"
+    >
       <Sun className="hidden size-4 dark:block" />
       <Moon className="size-4 dark:hidden" />
     </Button>
