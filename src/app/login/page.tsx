@@ -35,7 +35,12 @@ export default function LoginPage() {
         router.refresh()
       }
     } else {
-      const { data, error } = await supabase.auth.signUp(credentials)
+      // 확인 메일 링크가 Supabase의 Site URL이 아니라 지금 접속한 주소(로컬·프리뷰·배포)로 돌아오게 한다.
+      // Supabase Redirect URLs에 이 주소가 허용돼 있어야 적용된다.
+      const { data, error } = await supabase.auth.signUp({
+        ...credentials,
+        options: { emailRedirectTo: `${location.origin}/login` },
+      })
       if (error) setError(error.message)
       // 이메일 확인이 켜져 있으면 session이 없다.
       else if (!data.session) setMessage('가입 확인 메일을 보냈습니다. 메일의 링크를 누른 뒤 로그인해주세요.')
