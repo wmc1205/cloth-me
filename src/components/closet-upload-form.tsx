@@ -6,6 +6,9 @@ import { Button } from '@/components/ui/button'
 
 const MAX_FILES = 20
 const CONCURRENCY = 3
+// Vercel 함수는 요청 본문이 4.5MB를 넘으면 거부한다. 이보다 큰 사진은 줄여서 보낸다.
+const RESIZE_ABOVE_BYTES = 3 * 1024 * 1024
+const MAX_EDGE = 1600
 
 type Progress = { name: string; status: 'uploading' | 'tagging' | 'done' | 'check' | 'excluded' | 'failed'; message?: string }
 
@@ -23,6 +26,29 @@ async function errorMessage(res: Response, fallback: string) {
   return body?.error ?? fallback
 }
 
+// 큰 사진(특히 폰 사진)을 긴 변 MAX_EDGE 이하 JPEG로 줄인다. 실패하면 원본을 그대로 보낸다.
+async function shrinkIfLarge(file: File) {
+  if (file.size <= RESIZE_ABOVE_BYTES) return file
+  try {
+    const bitmap = await createImageBitmap(file)
+    const scale = Math.min(1, MAX_EDGE / Math.max(bitmap.width, bitmap.height))
+    const canvas = document.createElement('canvas')
+    canvas.width = Math.round(bitmap.width * scale)
+    canvas.height = Math.round(bitmap.height * scale)
+    const ctx = canvas.getContext('2d')
+    if (!ctx) return file
+    ctx.fillStyle = '#fff' // PNG 투명 배경이 JPEG에서 검게 나오지 않게
+    ctx.fillRect(0, 0, canvas.width, canvas.height)
+    ctx.drawImage(bitmap, 0, 0, canvas.width, canvas.height)
+    bitmap.close()
+    const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, 'image/jpeg', 0.85))
+    if (!blob || blob.size >= file.size) return file
+    return new File([blob], file.name.replace(/\.[^.]+$/, '') + '.jpg', { type: 'image/jpeg' })
+  } catch {
+    return file
+  }
+}
+
 export function ClosetUploadForm() {
   const router = useRouter()
   const [rows, setRows] = useState<Progress[]>([])
@@ -34,24 +60,29 @@ export function ClosetUploadForm() {
   }
 
   // 사진 1장 = 요청 1번. 요청 크기 제한을 피하고 장별 진행 상황을 보여주기 위해서다.
-  async function uploadOne(file: File, index: number) {
-    const body = new FormData()
-    body.set('file', file)
-    const res = await fetch('/api/closet', { method: 'POST', body })
-    if (!res.ok) {
-      update(index, { status: 'failed', message: await errorMessage(res, '업로드에 실패했습니다.') })
-      return
-    }
-    const { item } = await res.json()
+  // 네트워크 오류로 fetch가 throw돼도 그 장만 실패로 표시하고 나머지는 계속 올린다.
+  async function uploadOne(original: File, index: number) {
+    try {
+      const body = new FormData()
+      body.set('file', await shrinkIfLarge(original))
+      const res = await fetch('/api/closet', { method: 'POST', body })
+      if (!res.ok) {
+        update(index, { status: 'failed', message: await errorMessage(res, '업로드에 실패했습니다.') })
+        return
+      }
+      const { item } = await res.json()
 
-    update(index, { status: 'tagging' })
-    const tagRes = await fetch(`/api/closet/${item.id}/tag`, { method: 'POST' })
-    if (!tagRes.ok) {
-      update(index, { status: 'check' })
-      return
+      update(index, { status: 'tagging' })
+      const tagRes = await fetch(`/api/closet/${item.id}/tag`, { method: 'POST' })
+      if (!tagRes.ok) {
+        update(index, { status: 'check' })
+        return
+      }
+      const tagBody = await tagRes.json().catch(() => null)
+      update(index, { status: tagBody?.excluded ? 'excluded' : 'done' })
+    } catch {
+      update(index, { status: 'failed', message: '네트워크 오류로 업로드하지 못했습니다.' })
     }
-    const tagBody = await tagRes.json().catch(() => null)
-    update(index, { status: tagBody?.excluded ? 'excluded' : 'done' })
   }
 
   async function onChange(e: React.ChangeEvent<HTMLInputElement>) {
