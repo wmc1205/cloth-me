@@ -5,6 +5,8 @@ import { generateJson, imageMessage, type ImageInput } from './generate-json'
 export const tagSchema = z.object({
   // false면 옷이 아닌 사진이다. 서버가 옷장에서 자동으로 제외한다.
   isClothing: z.boolean(),
+  // true면 사람이 입고 있는 착장 사진이다. 서버가 옷을 한 벌씩 나눠 옷장에 넣는다. 없으면 false로 본다.
+  wornByPerson: z.boolean().optional(),
   category: z.enum(CATEGORIES),
   name: z.string().trim().min(1).max(50),
   colors: z.array(z.string().trim().min(1).max(30)).min(1).max(3),
@@ -22,6 +24,7 @@ export type Tag = z.infer<typeof tagSchema>
 const SYSTEM = `너는 옷 사진을 분석하는 도우미다. 사진 속 옷 한 벌을 분석해서 JSON으로만 답해라. 설명 문장은 쓰지 마라.
 
 - isClothing: 사진에 옷·신발·가방·모자 등 착용 아이템이 하나라도 있으면 true. 풍경, 음식, 동물, 문서, 사람 얼굴만 있는 사진처럼 착용 아이템이 전혀 없을 때만 false.
+- wornByPerson: 사람이 옷을 입고 있는 사진(전신·상반신 착장 사진)이면 true. 옷만 단독으로 놓였거나 걸려 있으면 false. 항상 포함한다.
 - category: outer(아우터) / top(상의) / bottom(하의) / shoes(신발) / etc(기타) 중 하나. 애매하면 etc.
 - name: 한국어 옷 이름 50자 이내. 예) 화이트 오버핏 셔츠
 - colors: 영어 소문자 기본 색상명 배열(최대 3개). 가장 큰 면적의 색이 첫 번째.
